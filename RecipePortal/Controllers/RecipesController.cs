@@ -20,6 +20,7 @@ namespace RecipePortal.Controllers
         private JavaScriptSerializer jss = new JavaScriptSerializer();
         private static readonly HttpClient client;
 
+        public object SelectedRecipe { get; private set; }
 
         static RecipesController()
         {
@@ -40,7 +41,7 @@ namespace RecipePortal.Controllers
 
 
 
-        // GET: Player/List
+        // GET: Recipe/List
         public ActionResult List()
         {
             string url = "RecipesData/GetRecipes";
@@ -59,7 +60,29 @@ namespace RecipePortal.Controllers
         // GET: Recipes/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            ShowRecipe ViewModel = new ShowRecipe();
+            string url = "Recipedata/findRecipe/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            //Can catch the status code (200 OK, 301 REDIRECT), etc.
+            //Debug.WriteLine(response.StatusCode);
+            if (response.IsSuccessStatusCode)
+            {
+                //Put data into Recipe data transfer object
+                RecipeDto SelectedRecipe = response.Content.ReadAsAsync<RecipeDto>().Result;
+                ViewModel.Recipe = SelectedRecipe;
+
+
+                //url = "recipedata/findcuisineforrecipe/" + id;
+                //response = client.GetAsync(url).Result;
+                //CuisineDto SelectedCuisine = response.Content.ReadAsAsync<CuisineDto>().Result;
+                //ViewModel.Cuisine = SelectedCuisine;
+
+                return View(ViewModel);
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
         }
 
         // GET: Recipes/Create
@@ -72,16 +95,15 @@ namespace RecipePortal.Controllers
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
-            try
-            {
-                // TODO: Add insert logic here
+           
+                UpdateRecipe ViewModel = new UpdateRecipe();
+                string url = "recipedata/getrecipe";
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                IEnumerable<CuisineDto> PotentialCuisines = response.Content.ReadAsAsync<IEnumerable<CuisineDto>>().Result;
+                ViewModel.allcuisines = PotentialCuisines;
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+                return View(ViewModel);
+                // TODO: Add insert logic here
         }
 
         // GET: Recipes/Edit/5
@@ -129,7 +151,7 @@ namespace RecipePortal.Controllers
         }
     }
 
-    internal class PlayerDto
+    internal class RecipeDto
     {
     }
 }
