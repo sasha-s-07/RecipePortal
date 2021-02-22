@@ -140,7 +140,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CuisinesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HouseholdIngredientsController.cs" />
     <Compile Include="Controllers\HouseholdIngredientsxRecipesController.cs" />
     <Compile Include="Controllers\RecipesController.cs" />
     <Compile Include="Controllers\ShowRecipe.cs" />
@@ -217,6 +219,16 @@
     <Content Include="Views\Recipes\Details.cshtml" />
     <Content Include="Views\Recipes\Edit.cshtml" />
     <Content Include="Views\Recipes\Index.cshtml" />
+    <Content Include="Views\Cuisines\Create.cshtml" />
+    <Content Include="Views\Cuisines\Delete.cshtml" />
+    <Content Include="Views\Cuisines\Details.cshtml" />
+    <Content Include="Views\Cuisines\Edit.cshtml" />
+    <Content Include="Views\Cuisines\Index.cshtml" />
+    <Content Include="Views\HouseholdIngredients\Create.cshtml" />
+    <Content Include="Views\HouseholdIngredients\Delete.cshtml" />
+    <Content Include="Views\HouseholdIngredients\Details.cshtml" />
+    <Content Include="Views\HouseholdIngredients\Edit.cshtml" />
+    <Content Include="Views\HouseholdIngredients\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
