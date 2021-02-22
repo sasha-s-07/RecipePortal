@@ -18,21 +18,20 @@ namespace RecipePortal.Models
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Cuisine> Cuisines { get; set; }
         public DbSet<HouseholdIngredient> Ingredients { get; set; }
+
+        public DbSet<HouseholdIngredientsxRecipes> HouseholdIngredients { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Recipe>()
-                .HasMany<HouseholdIngredient>(s => s.HouseholdIngredients)
-                .WithMany(x => x.Recipes)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("RecipeID");
-                    cs.MapRightKey("HouseholdIngredientID");
-                    cs.ToTable("HouseholdIngredientsRecipes");
-                });
-            
-            
+           
+       
+            modelBuilder.Entity<HouseholdIngredientsxRecipes>()
+                .HasKey(cs => new { cs.RecipeID, cs.HouseholdIngredientID });
         }
+    }
+
 
     }
 
-}
+    
+
+

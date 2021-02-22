@@ -13,14 +13,14 @@ namespace RecipePortal.Models
     {
         [Key]
         public int HouseholdIngredientID { get; set; }
-
+       
         public string HouseholdIngredientName { get; set; }
 
 
         //Utilizes the inverse property to specify the "Many"
         //https://www.entityframeworktutorial.net/code-first/inverseproperty-dataannotations-attribute-in-code-first.aspx
         //One ingredient Many recipes
-        public ICollection<Recipe> Recipes { get; set; }
+        public ICollection<HouseholdIngredientsxRecipes> HouseholdIngredients { get; set; }
 
     }
 }

@@ -1,157 +1,132 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.IO;
 using RecipePortal.Models;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Diagnostics;
-using System.Web.Script.Serialization;
-
 
 namespace RecipePortal.Controllers
 {
     public class RecipesController : Controller
     {
+        private RecipePortalDataContext db = new RecipePortalDataContext();
+
         // GET: Recipes
-
-        private JavaScriptSerializer jss = new JavaScriptSerializer();
-        private static readonly HttpClient client;
-
-        public object SelectedRecipe { get; private set; }
-
-        static RecipesController()
+        public ActionResult Index()
         {
-            HttpClientHandler handler = new HttpClientHandler()
-            {
-                AllowAutoRedirect = false
-            };
-            client = new HttpClient(handler);
-            //change this to match your own local port number
-            client.BaseAddress = new Uri("https://localhost:44326/api/");
-            client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ACCESS_TOKEN);
-
-        }
-
-
-
-        // GET: Recipe/List
-        public ActionResult List()
-        {
-            string url = "RecipesData/GetRecipes";
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                IEnumerable<RecipeDto> SelectedRecipes = response.Content.ReadAsAsync<IEnumerable<RecipeDto>>().Result;
-                return View(SelectedRecipes);
-            }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            var recipes = db.Recipes.Include(r => r.Cuisine);
+            return View(recipes.ToList());
         }
 
         // GET: Recipes/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            ShowRecipe ViewModel = new ShowRecipe();
-            string url = "Recipedata/findRecipe/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            //Can catch the status code (200 OK, 301 REDIRECT), etc.
-            //Debug.WriteLine(response.StatusCode);
-            if (response.IsSuccessStatusCode)
+            if (id == null)
             {
-                //Put data into Recipe data transfer object
-                RecipeDto SelectedRecipe = response.Content.ReadAsAsync<RecipeDto>().Result;
-                ViewModel.Recipe = SelectedRecipe;
-
-
-                //url = "recipedata/findcuisineforrecipe/" + id;
-                //response = client.GetAsync(url).Result;
-                //CuisineDto SelectedCuisine = response.Content.ReadAsAsync<CuisineDto>().Result;
-                //ViewModel.Cuisine = SelectedCuisine;
-
-                return View(ViewModel);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            else
+            Recipe recipe = db.Recipes.Find(id);
+            if (recipe == null)
             {
-                return RedirectToAction("Error");
+                return HttpNotFound();
             }
+            return View(recipe);
         }
 
         // GET: Recipes/Create
         public ActionResult Create()
         {
+            ViewBag.CuisineID = new SelectList(db.Cuisines, "CuisineID", "CuisineName");
             return View();
         }
 
         // POST: Recipes/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "RecipeID,RecipeName,RecipeLink,CookingTime,CuisineID")] Recipe recipe)
         {
-           
-                UpdateRecipe ViewModel = new UpdateRecipe();
-                string url = "recipedata/getrecipe";
-                HttpResponseMessage response = client.GetAsync(url).Result;
-                IEnumerable<CuisineDto> PotentialCuisines = response.Content.ReadAsAsync<IEnumerable<CuisineDto>>().Result;
-                ViewModel.allcuisines = PotentialCuisines;
+            if (ModelState.IsValid)
+            {
+                db.Recipes.Add(recipe);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-                return View(ViewModel);
-                // TODO: Add insert logic here
+            ViewBag.CuisineID = new SelectList(db.Cuisines, "CuisineID", "CuisineName", recipe.CuisineID);
+            return View(recipe);
         }
 
         // GET: Recipes/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Recipe recipe = db.Recipes.Find(id);
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CuisineID = new SelectList(db.Cuisines, "CuisineID", "CuisineName", recipe.CuisineID);
+            return View(recipe);
         }
 
         // POST: Recipes/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "RecipeID,RecipeName,RecipeLink,CookingTime,CuisineID")] Recipe recipe)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
+                db.Entry(recipe).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.CuisineID = new SelectList(db.Cuisines, "CuisineID", "CuisineName", recipe.CuisineID);
+            return View(recipe);
         }
 
         // GET: Recipes/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Recipe recipe = db.Recipes.Find(id);
+            if (recipe == null)
+            {
+                return HttpNotFound();
+            }
+            return View(recipe);
         }
 
         // POST: Recipes/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            Recipe recipe = db.Recipes.Find(id);
+            db.Recipes.Remove(recipe);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
-    }
 
-    internal class RecipeDto
-    {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

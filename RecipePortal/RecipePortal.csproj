@@ -141,8 +141,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HouseholdIngredientsxRecipesController.cs" />
     <Compile Include="Controllers\RecipesController.cs" />
-    <Compile Include="Controllers\RecipesDataController.cs" />
     <Compile Include="Controllers\ShowRecipe.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -159,9 +159,14 @@
     <Compile Include="Migrations\202102200500229_add6.designer.cs">
       <DependentUpon>202102200500229_add6.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202102220217072_add7.cs" />
+    <Compile Include="Migrations\202102220217072_add7.designer.cs">
+      <DependentUpon>202102220217072_add7.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Cuisine.cs" />
     <Compile Include="Models\HouseholdIngredient.cs" />
+    <Compile Include="Models\HouseholdIngredientsxRecipes.cs" />
     <Compile Include="Models\Recipe.cs" />
     <Compile Include="Models\RecipePortalDataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -202,19 +207,19 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\List.cshtml" />
-    <Content Include="Views\Add.cshtml" />
-    <Content Include="Views\View.cshtml" />
-    <Content Include="Views\ListCuisines.cshtml" />
-    <Content Include="Views\Delete.cshtml" />
-    <Content Include="Views\update.cshtml" />
-    <Content Include="Views\AddCuisines.cshtml" />
-    <Content Include="Views\UpdateCuisine.cshtml" />
-    <Content Include="Views\DeleteCuisine.cshtml" />
+    <Content Include="Views\HouseholdIngredientsxRecipes\Create.cshtml" />
+    <Content Include="Views\HouseholdIngredientsxRecipes\Delete.cshtml" />
+    <Content Include="Views\HouseholdIngredientsxRecipes\Details.cshtml" />
+    <Content Include="Views\HouseholdIngredientsxRecipes\Edit.cshtml" />
+    <Content Include="Views\HouseholdIngredientsxRecipes\Index.cshtml" />
+    <Content Include="Views\Recipes\Create.cshtml" />
+    <Content Include="Views\Recipes\Delete.cshtml" />
+    <Content Include="Views\Recipes\Details.cshtml" />
+    <Content Include="Views\Recipes\Edit.cshtml" />
+    <Content Include="Views\Recipes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Recipes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -238,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202102200500229_add6.resx">
       <DependentUpon>202102200500229_add6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202102220217072_add7.resx">
+      <DependentUpon>202102220217072_add7.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

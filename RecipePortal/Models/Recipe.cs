@@ -24,7 +24,7 @@ namespace RecipePortal.Models
         public virtual Cuisine Cuisine { get; set; }
 
         // a recipe can have many ingredients
-        public ICollection<HouseholdIngredient> HouseholdIngredients { get; set; }
+        public ICollection<HouseholdIngredientsxRecipes> HouseholdIngredients { get; set; }
         
        
     }

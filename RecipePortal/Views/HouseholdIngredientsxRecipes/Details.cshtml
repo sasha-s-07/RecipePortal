@@ -1,0 +1,42 @@
+﻿@model RecipePortal.Models.HouseholdIngredientsxRecipes
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>HouseholdIngredientsxRecipes</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.HouseholdIngredient.HouseholdIngredientName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HouseholdIngredient.HouseholdIngredientName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Recipe.RecipeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Recipe.RecipeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HouseholdIngredientsxRecipesID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HouseholdIngredientsxRecipesID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
